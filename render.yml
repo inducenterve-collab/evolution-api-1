@@ -1,17 +1,46 @@
-version: '3'
 services:
-  evolution-api:
-    container_name: evolution_api
-    image: atendai/evolution-api
-    restart: always
-    ports:
-      - "8080:8080"
-    env_file:
-      - .env
-    volumes:
-      - evolution_store:/evolution/store
-      - evolution_instances:/evolution/instances
+  - type: web
+    name: evolution-api
+    env: docker
+    plan: free # Intenta forzar el plan gratuito
+    region: oregon # O la región más cercana (frankfurt, ohio, singapore)
+    
+    # Configuración de entorno
+    envVars:
+      - key: SERVER_PORT
+        value: 8080
+      - key: SERVER_URL
+        sync: false # Render te pedirá este valor o lo llenará automáticamente tras el despliegue
+      
+      # Seguridad (Generará una clave segura automáticamente)
+      - key: AUTHENTICATION_API_KEY
+        value: "clave"
+        
+      # Configuración de la API
+      - key: DEL_INSTANCE
+        value: "false" # Evita que se borren instancias automáticamente
+      
+      # IMPORTANTE: Logs y Debug
+      - key: LOG_LEVEL
+        value: "error" # Mantenemos los logs bajos para ahorrar recursos
+        
+      # IMPORTANTE PARA EL PLAN GRATUITO (Sin Redis/Database externa)
+      # Si no tienes una base de datos externa (Mongo/Postgres), las sesiones se guardan en local.
+      # En Render Free, si la app se reinicia, PERDERÁS LA CONEXIÓN DE WHATSAPP (QR).
+      # Se recomienda encarecidamente conectar un MongoDB externo (ej. MongoDB Atlas Free).
+      
+      # Descomenta y rellena estas líneas si tienes un Mongo externo (RECOMENDADO):
+      # - key: DATABASE_ENABLED
+      #   value: "true"
+      # - key: DATABASE_CONNECTION_URI
+      #   value: "mongodb+srv://usuario:password@cluster.mongodb.net/?retryWrites=true&w=majority"
+      # - key: DATABASE_PROVIDER
+      #   value: "mongodb"
 
-volumes:
-  evolution_store:
-  evolution_instances:
+      # Configuración para evitar errores si no usas Redis
+      - key: CACHE_REDIS_ENABLED
+        value: "false" 
+
+    # Configuración de salud del servicio
+    healthCheckPath: /
+    autoDeploy: false # Recomendado en free para no gastar minutos de build innecesarios
