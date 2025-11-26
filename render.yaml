@@ -15,7 +15,7 @@ services:
       - key: SERVER_URL
         sync: false # Render te pedirá esto o lo llenará solo
       - key: AUTHENTICATION_API_KEY
-        value: "clave"
+        value: "Salvi"
       - key: DEL_INSTANCE
         value: "false"
         
@@ -33,7 +33,7 @@ services:
       - key: DATABASE_PROVIDER
         value: "postgresql"
       - key: DATABASE_CONNECTION_URI
-        value: "postgresql://neondb_owner:npg_4vV3UaTHqOSi@ep-gentle-pond-ad8t6ig5.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
+        value: "postgresql://neondb_owner:npg_Omw5GvVtkS7F@ep-plain-fire-a4ab4iuv.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
       - key: DATABASE_CONNECTION_CLIENT_NAME
         value: "evolution_exchange"
       
